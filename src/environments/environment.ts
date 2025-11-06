@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000/api',
+  apiUrl: 'https://backend-biblioteca-m4qy.onrender.com/api',
   debug: true,
   logLevel: 'debug'
 };
