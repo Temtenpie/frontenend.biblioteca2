@@ -21,7 +21,7 @@ export class AuthService {
     payload.email = username;
 
     return this.http
-      .post<any>(this.loginUrl, payload, { withCredentials: true })
+      .post<any>(this.loginUrl, payload)
       .pipe(
         map((res: any) => {
           const token = res?.token ?? res?.accessToken ?? res?.data?.token ?? '';
