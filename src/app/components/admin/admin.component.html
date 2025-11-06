@@ -1,0 +1,274 @@
+<div class="admin-container">
+  <header class="admin-header">
+    <div class="header-left">
+      <h1>⚙️ Panel Administrativo</h1>
+      <p>{{ userName() }}</p>
+    </div>
+    <button (click)="logout()" class="logout-btn">Cerrar Sesión</button>
+  </header>
+
+<div class="admin-layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="avatar">⚙️</div>
+      <div class="info">
+        <div class="name">{{ userName() }}</div>
+        <div class="role text-muted">Administrador</div>
+      </div>
+    </div>
+    <nav class="side-nav">
+      <button class="side-link" [class.active]="activeTab() === 'dashboard'" (click)="switchTab('dashboard')">📊 Dashboard</button>
+      <button class="side-link" [class.active]="activeTab() === 'books'" (click)="switchTab('books')">📚 Libros</button>
+      <button class="side-link" [class.active]="activeTab() === 'loans'" (click)="switchTab('loans')">📤 Préstamos</button>
+      <button class="side-link" [class.active]="activeTab() === 'users'" (click)="switchTab('users')">👥 Usuarios</button>
+    </nav>
+  </aside>
+
+  <section class="content">
+    <!-- DASHBOARD -->
+    <div *ngIf="activeTab() === 'dashboard'" class="tab-content">
+      <h2>Dashboard</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📚</div>
+          <div class="stat-info">
+            <div class="stat-label">Total de Libros</div>
+            <div class="stat-value">{{ totalBooks() }}</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📤</div>
+          <div class="stat-info">
+            <div class="stat-label">Préstamos Activos</div>
+            <div class="stat-value">{{ activeLoans() }}</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📋</div>
+          <div class="stat-info">
+            <div class="stat-label">Total de Préstamos</div>
+            <div class="stat-value">{{ totalLoans() }}</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-info">
+            <div class="stat-label">Total de Usuarios</div>
+            <div class="stat-value">{{ totalUsers() }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOOKS MANAGEMENT -->
+    <div *ngIf="activeTab() === 'books'" class="tab-content">
+      <div class="list-section">
+        <div class="list-actions">
+          <h2>📚 Libros Registrados</h2>
+          <button class="btn-ghost" (click)="openCreateBook()">➕ Agregar Libro</button>
+        </div>
+
+        
+
+        <div *ngIf="loading()" class="loading">Cargando libros...</div>
+        <div *ngIf="!loading() && books().length === 0" class="empty">No hay libros registrados</div>
+        <div class="table-wrapper" *ngIf="!loading() && books().length > 0">
+          <table class="data-table">
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Autor</th>
+              <th>ISBN</th>
+              <th>Año</th>
+              <th>Categoría</th>
+              <th>Total</th>
+              <th>Disponibles</th>
+              <th class="col-actions">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let book of books()">
+              <td><strong>{{ book.titulo }}</strong></td>
+              <td>{{ book.autor }}</td>
+              <td>{{ book.isbn }}</td>
+              <td>{{ book.anio }}</td>
+              <td><span class="badge">{{ book.categoria }}</span></td>
+              <td>{{ book.total }}</td>
+              <td>
+                <span [class]="book.disponibles > 0 ? 'badge-success' : 'badge-danger'">
+                  {{ book.disponibles }}
+                </span>
+              </td>
+              <td class="actions">
+                <button (click)="editBook(book)" class="btn-edit">✏️</button>
+                <button (click)="deleteBook(book._id)" class="btn-delete">🗑️</button>
+              </td>
+            </tr>
+          </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-overlay" *ngIf="editingBookId() || showBookForm()" (click)="resetBookForm()">
+        <div class="modal" (click)="$event.stopPropagation()">
+          <div class="modal-header">
+            <span>{{ editingBookId() ? '✏️ Editar Libro' : '➕ Agregar Nuevo Libro' }}</span>
+            <button class="close-btn" (click)="resetBookForm()">✖</button>
+          </div>
+          <div class="modal-body">
+            <form (ngSubmit)="saveBook()" class="book-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Título *</label>
+                  <input type="text" [(ngModel)]="newBook().titulo" name="titulo" placeholder="Ej: Papelucho" required>
+                </div>
+                <div class="form-group">
+                  <label>Autor *</label>
+                  <input type="text" [(ngModel)]="newBook().autor" name="autor" placeholder="Ej: Marcela Paz" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>ISBN *</label>
+                  <input type="text" [(ngModel)]="newBook().isbn" name="isbn" placeholder="Ej: 4432" required>
+                </div>
+                <div class="form-group">
+                  <label>Año *</label>
+                  <input type="number" [(ngModel)]="newBook().anio" name="anio" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Categoría *</label>
+                  <input type="text" [(ngModel)]="newBook().categoria" name="categoria" placeholder="Ej: Ciencia ficción" required>
+                </div>
+                <div class="form-group">
+                  <label>Editorial</label>
+                  <input type="text" [(ngModel)]="newBook().editorial" name="editorial" placeholder="Ej: Norma">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Total de Copias</label>
+                  <input type="number" [(ngModel)]="newBook().total" name="total" min="1">
+                </div>
+              </div>
+
+              <div class="form-group full-width">
+                <label>Descripción</label>
+                <textarea [(ngModel)]="newBook().descripcion" name="descripcion" placeholder="Descripción del libro" rows="4"></textarea>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" [disabled]="loading()" class="btn-primary">
+                  {{ editingBookId() ? '✏️ Actualizar Libro' : '➕ Crear Libro' }}
+                </button>
+                <button type="button" (click)="resetBookForm()" class="btn-secondary">Cancelar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOANS MANAGEMENT -->
+    <div *ngIf="activeTab() === 'loans'" class="tab-content">
+      <div class="list-section">
+        <h2>📤 Gestión de Préstamos</h2>
+        <div *ngIf="loading()" class="loading">Cargando préstamos...</div>
+        <div *ngIf="!loading() && loans().length === 0" class="empty">
+          No hay préstamos registrados
+        </div>
+        <div class="table-wrapper" *ngIf="!loading() && loans().length > 0">
+          <table class="data-table">
+          <thead>
+            <tr>
+              <th>Usuario</th>
+              <th>Libro</th>
+              <th>Fecha Préstamo</th>
+              <th>Fecha Límite</th>
+              <th>Estado</th>
+              <th class="col-actions">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let loan of loans()" [class]="'status-' + loan.estado">
+              <td title="{{ loan.usuarioId?.name || 'N/A' }}">{{ loan.usuarioId?.name || 'N/A' }}</td>
+              <td title="{{ loan.libroId?.titulo || 'N/A' }}">{{ loan.libroId?.titulo || 'N/A' }}</td>
+              <td>{{ loan.createdAt | date: 'short' }}</td>
+              <td>{{ loan.fechaLimite | date: 'short' }}</td>
+              <td>
+                <span [class]="'badge-' + loan.estado">
+                  {{ loan.estado | uppercase }}
+                </span>
+              </td>
+              <td class="actions">
+                <button 
+                  *ngIf="loan.estado === 'activo'"
+                  (click)="returnBook(loan._id)" 
+                  class="btn-success">
+                  ✓ Marcar Devuelto
+                </button>
+                <span *ngIf="loan.estado !== 'activo'" class="text-muted">
+                  -
+                </span>
+              </td>
+            </tr>
+          </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- USERS MANAGEMENT -->
+    <div *ngIf="activeTab() === 'users'" class="tab-content">
+      <div class="list-section">
+        <h2>👥 Gestión de Usuarios</h2>
+        <div *ngIf="loading()" class="loading">Cargando usuarios...</div>
+        <div *ngIf="!loading() && users().length === 0" class="empty">
+          No hay usuarios registrados
+        </div>
+        <div class="table-wrapper" *ngIf="!loading() && users().length > 0">
+          <table class="data-table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Email</th>
+              <th>Rol</th>
+              <th>Carné ID</th>
+              <th>Registrado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of users()">
+              <td title="{{ user.name }}"><strong>{{ user.name }}</strong></td>
+              <td title="{{ user.email }}">{{ user.email }}</td>
+              <td>
+                <span [class]="'role-' + user.role">
+                  {{ user.role === 'admin' ? '⚙️ Admin' : (user.role === 'teacher' ? '👨‍🏫 Profesor' : '👤 Estudiante') }}
+                </span>
+              </td>
+              <td>{{ user.carnetId || '-' }}</td>
+              <td>{{ user.createdAt | date: 'short' }}</td>
+              <td class="actions">
+                <button 
+                  *ngIf="user.role !== 'admin'"
+                  (click)="deleteUser(user._id)" 
+                  class="btn-delete">
+                  🗑️
+                </button>
+                <span *ngIf="user.role === 'admin'" class="text-muted">-</span>
+              </td>
+            </tr>
+          </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+  </div>
+</div>

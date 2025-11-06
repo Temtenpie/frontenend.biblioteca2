@@ -1,0 +1,81 @@
+<div class="login-container">
+  <div class="login-layout">
+    <section class="brand-panel">
+      <div class="brand-logo">🏛️</div>
+      <h2 class="brand-title">Mi Biblioteca online</h2>
+      <p class="brand-subtitle">Tu acceso institucional al catálogo y préstamos</p>
+      <p class="brand-description">Consulta libros disponibles, solicita préstamos y gestiona tu cuenta de forma segura, todo en un solo lugar.</p>
+    </section>
+    <section class="form-panel card">
+      <h1>Iniciar sesión</h1>
+      <form (ngSubmit)="onLogin()" class="login-form-inner">
+        <input type="text" [(ngModel)]="username" name="username" placeholder="Usuario">
+        <input type="password" [(ngModel)]="password" name="password" placeholder="Contraseña">
+        <button type="submit">Entrar</button>
+      </form>
+      @if (error()) {
+        <div class="error">{{ error() }}</div>
+      }
+      <div class="link">
+        <a href="#" class="register-link" (click)="openRegister(); $event.preventDefault()">Crear cuenta nueva</a>
+      </div>
+    </section>
+  </div>
+</div>
+
+@if (showRegister()) {
+  <div class="modal-overlay" (click)="closeRegister()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>📝 Crear Cuenta</h2>
+        <button class="close-btn" (click)="closeRegister()">✖</button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="onRegisterSubmit()">
+          <input type="text" [(ngModel)]="regName" name="regName" placeholder="Nombre completo"
+                 (input)="markTouched('name')" (blur)="markTouched('name')"
+                 [class.is-invalid]="regNameTouched() && getNameError()"
+                 [class.is-valid]="regNameTouched() && !getNameError() && regName">
+          @if (regNameTouched() && getNameError()) { <div class="field-error">{{ getNameError() }}</div> }
+          <input type="email" [(ngModel)]="regEmail" name="regEmail" placeholder="Correo electrónico"
+                 (input)="markTouched('email')" (blur)="markTouched('email')"
+                 [class.is-invalid]="regEmailTouched() && getEmailError()"
+                 [class.is-valid]="regEmailTouched() && !getEmailError() && regEmail">
+          @if (regEmailTouched() && getEmailError()) { <div class="field-error">{{ getEmailError() }}</div> }
+          <input type="text" [(ngModel)]="regUsername" name="regUsername" placeholder="Usuario"
+                 (input)="markTouched('username')" (blur)="markTouched('username')"
+                 [class.is-invalid]="regUsernameTouched() && getUsernameError()"
+                 [class.is-valid]="regUsernameTouched() && !getUsernameError() && regUsername">
+          @if (regUsernameTouched() && getUsernameError()) { <div class="field-error">{{ getUsernameError() }}</div> }
+          <input type="password" [(ngModel)]="regPassword" name="regPassword" placeholder="Contraseña"
+                 (input)="markTouched('password')" (blur)="markTouched('password')"
+                 [class.is-invalid]="regPasswordTouched() && getPasswordError()"
+                 [class.is-valid]="regPasswordTouched() && !getPasswordError() && regPassword">
+          @if (regPasswordTouched() && getPasswordError()) { <div class="field-error">{{ getPasswordError() }}</div> }
+          <input type="password" [(ngModel)]="regConfirmPassword" name="regConfirmPassword" placeholder="Confirmar contraseña"
+                 (input)="markTouched('confirm')" (blur)="markTouched('confirm')"
+                 [class.is-invalid]="regConfirmTouched() && getConfirmError()"
+                 [class.is-valid]="regConfirmTouched() && !getConfirmError() && regConfirmPassword">
+          @if (regConfirmTouched() && getConfirmError()) { <div class="field-error">{{ getConfirmError() }}</div> }
+          <select [(ngModel)]="regRole" name="regRole"
+                  (change)="markTouched('role')"
+                  [class.is-invalid]="regRoleTouched() && getRoleError()"
+                  [class.is-valid]="regRoleTouched() && !getRoleError() && regRole">
+            <option [ngValue]="null" disabled>Selecciona un rol</option>
+            <option value="student">Estudiante</option>
+            <option value="teacher">Profesor</option>
+          </select>
+          @if (regRoleTouched() && getRoleError()) { <div class="field-error">{{ getRoleError() }}</div> }
+          <button type="submit" [disabled]="regLoading() || getNameError() || getEmailError() || getUsernameError() || getPasswordError() || getConfirmError() || getRoleError()">Crear cuenta</button>
+          <p class="hint">La contraseña debe tener mínimo 8 caracteres e incluir letras y números.</p>
+        </form>
+        @if (regError()) {
+          <div class="error">{{ regError() }}</div>
+        }
+        @if (regSuccess()) {
+          <div class="success">{{ regSuccess() }}</div>
+        }
+      </div>
+    </div>
+  </div>
+}

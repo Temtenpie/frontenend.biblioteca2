@@ -1,0 +1,98 @@
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+/* Split layout */
+.register-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1080px;
+}
+
+.brand-panel { padding: 2rem; }
+.brand-logo { font-size: 3rem; line-height: 1; }
+.brand-panel h2 { margin: 0.75rem 0 0.25rem 0; color: var(--text-100); }
+.brand-sub { color: var(--muted-400); margin-bottom: 1rem; }
+.features { list-style: none; display: grid; gap: 0.6rem; margin-top: 0.5rem; }
+.features li::before { content: '✓'; margin-right: 0.5rem; color: var(--primary-400); }
+
+.form-panel { padding: 2rem; }
+.form-panel h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: var(--text-100);
+}
+
+.register-form-inner input,
+.register-form-inner select {
+  width: 100%;
+  padding: 0.85rem;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  background-color: rgba(255,255,255,0.04);
+  color: var(--text-200);
+}
+
+/* Opciones del selector: texto negro y fondo claro para contraste */
+.register-form-inner select option {
+  color: #000;
+  background-color: #fff;
+}
+
+.register-form-inner input:focus,
+.register-form-inner select:focus {
+  outline: none;
+  border-color: var(--primary-400);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15);
+}
+
+.register-form-inner button {
+  width: 100%;
+  padding: 0.9rem;
+  background: linear-gradient(90deg, var(--primary-500), var(--secondary-500));
+  color: var(--text-100);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.35);
+}
+
+.register-form-inner button:hover {
+  filter: brightness(1.05);
+}
+
+.error {
+  color: var(--error-500);
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+.success {
+  color: var(--success-500);
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+.link {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.link a {
+  color: var(--primary-400);
+  text-decoration: none;
+}
+
+.link a:hover {
+  text-decoration: underline;
+}

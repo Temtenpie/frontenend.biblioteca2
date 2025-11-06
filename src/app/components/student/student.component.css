@@ -1,0 +1,363 @@
+.student-container {
+  min-height: 100vh;
+  background: transparent;
+}
+
+/* Header */
+.student-header {
+  background: linear-gradient(135deg, var(--primary-500) 0%, var(--secondary-500) 100%);
+  background-size: 200% 200%;
+  animation: headerGradientShift 16s ease infinite;
+  color: var(--text-100);
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.header-left h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.header-left p {
+  margin: 0.5rem 0 0 0;
+  opacity: 0.9;
+  font-size: 0.9rem;
+}
+
+.logout-btn {
+  padding: 0.7rem 1.5rem;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+/* Sidebar Layout */
+.student-layout { display: grid; grid-template-columns: 260px 1fr; gap: 2rem; padding: 2rem; }
+.sidebar { padding: 1.25rem; color: var(--text-200); background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-md); box-shadow: var(--shadow-1); }
+.sidebar-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+.avatar { font-size: 1.6rem; }
+.name { color: var(--text-100); font-weight: 600; }
+.side-nav { display: grid; gap: 0.5rem; }
+.side-link { text-align: left; padding: 0.7rem 0.8rem; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); color: var(--text-200); border-radius: var(--radius-sm); cursor: pointer; }
+.side-link.active { border-color: var(--primary-400); color: var(--text-100); }
+
+/* Content */
+.content {
+  padding: 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.tab-content {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Unificar altura de arranque para títulos en pestañas */
+.tab-content h2 {
+  margin-bottom: 0.75rem;
+}
+
+/* Animación de gradiente para el encabezado */
+@keyframes headerGradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Dashboard Card */
+.dashboard-card { padding: 2rem; border-radius: var(--radius-md); background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)); border: 1px solid rgba(255,255,255,0.08); box-shadow: var(--shadow-1); }
+
+.dashboard-card h2 {
+  color: var(--primary-500);
+  margin-top: 0;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.info-item {
+  background: rgba(255,255,255,0.04);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--primary-500);
+}
+
+.info-item .label {
+  display: block;
+  color: var(--muted-400);
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.info-item .value {
+  display: block;
+  color: var(--primary-500);
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+/* Books Grid */
+.books-grid {
+  display: grid;
+  /* Por defecto, 5 columnas en pantallas grandes */
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+/* Responsivo: reduce columnas cuando el ancho no alcanza */
+@media (max-width: 1400px) {
+  .books-grid { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 1100px) {
+  .books-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+  .books-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .books-grid { grid-template-columns: 1fr; }
+}
+
+.book-card { background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)); border-radius: var(--radius-md); padding: 1.5rem; box-shadow: var(--shadow-1); transition: transform 0.3s ease, box-shadow 0.3s ease; display: flex; flex-direction: column; border: 1px solid rgba(255,255,255,0.08); }
+
+.book-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.book-cover {
+  font-size: 3rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.book-card h3 {
+  margin: 0.5rem 0;
+  color: var(--text-100, #f5f5f5);
+  font-size: 1.1rem;
+  min-height: 2.2rem;
+}
+
+.book-card .author {
+  color: var(--primary-400, #7dd3fc);
+  font-size: 0.9rem;
+  margin: 0.3rem 0;
+  font-style: italic;
+}
+
+.book-card .isbn {
+  color: var(--text-300, #d0d0d0);
+  font-size: 0.8rem;
+  margin: 0.3rem 0;
+}
+
+.book-card .year {
+  color: var(--text-300, #d0d0d0);
+  font-size: 0.85rem;
+  margin: 0.3rem 0;
+}
+
+.book-card .category {
+  display: inline-block;
+  background: rgba(34, 197, 94, 0.15);
+  color: var(--success-500);
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  margin: 0.5rem 0;
+  font-weight: 500;
+}
+
+.book-card .description {
+  color: var(--text-200, #eaeaea);
+  font-size: 0.85rem;
+  margin: 0.5rem 0;
+  flex-grow: 1;
+  line-height: 1.4;
+}
+
+.available {
+  color: var(--success-500);
+  font-weight: bold;
+  margin: 0.5rem 0;
+}
+
+.available.unavailable {
+  color: var(--error-500);
+}
+
+.btn-borrow {
+  width: 100%;
+  padding: 0.8rem;
+  margin-top: 1rem;
+  background: linear-gradient(90deg, var(--primary-500), var(--secondary-500));
+  color: var(--text-100);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-weight: bold;
+  transition: opacity 0.3s ease;
+}
+
+.btn-borrow:hover {
+  opacity: 0.9;
+}
+
+.btn-unavailable {
+  width: 100%;
+  padding: 0.8rem;
+  margin-top: 1rem;
+  background: #ccc;
+  color: #999;
+  border: none;
+  border-radius: 5px;
+  cursor: not-allowed;
+  font-weight: bold;
+}
+
+/* Loans Table */
+.loans-table { width: 100%; border-collapse: collapse; border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-1); margin: 1rem auto 0; }
+
+.loans-table thead { background: rgba(255,255,255,0.06); color: var(--text-100); }
+
+.loans-table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+.loans-table td { padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+
+.loans-table tbody tr:hover { background-color: rgba(255,255,255,0.03); }
+
+.status-badge {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.badge-activo {
+  background: #d4edda;
+  color: #155724;
+}
+
+.badge-devuelto {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.badge-vencido {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* Loading & Empty States */
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #11998e;
+  font-size: 1.1rem;
+}
+
+.empty { text-align: center; padding: 2rem; border-radius: var(--radius-md); color: var(--muted-400); font-size: 1rem; background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)); border: 1px solid rgba(255,255,255,0.08); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .student-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .student-layout { grid-template-columns: 1fr; padding: 1rem; gap: 1rem; }
+
+  .books-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .loans-table {
+    font-size: 0.9rem;
+  }
+
+  .loans-table th,
+  .loans-table td {
+    padding: 0.7rem;
+  }
+
+  .content {
+    padding: 1rem;
+  }
+}
+
+/* ===== Adaptación de Sidebar y Layout para igualar Admin ===== */
+.student-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  padding: 2rem;
+  align-items: start;
+}
+.student-header { margin-left: 280px; }
+.student-layout { margin-left: 280px; }
+
+.sidebar {
+  padding: 1rem;
+  color: var(--text-200);
+  background: rgba(255,255,255,0.04);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 280px;
+  height: 100vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.side-nav { display: grid; gap: 0.4rem; margin: 22vh 0 1rem 0; }
+.side-link { text-align: left; padding: 0.85rem 1rem; border: none; background: transparent; color: var(--text-200); border-radius: 0; cursor: pointer; line-height: 1.35; font-size: 1.15rem; }
+.side-link:hover { background: rgba(255,255,255,0.06); }
+.side-link.active { background: rgba(255,255,255,0.08); color: var(--text-100); }
+
+/* Mejoras de contraste similares a Admin */
+.content { color: var(--text-100); }
+.tab-content h2 { color: var(--text-100); }
+
+@media (max-width: 768px) {
+  .student-header { margin-left: 0; }
+  .student-layout { margin-left: 0; }
+  .sidebar { position: relative; left: auto; top: auto; width: 100%; height: auto; overflow: visible; border-radius: var(--radius-md); }
+  .side-nav { margin: 0.5rem 0 1rem 0; gap: 0.3rem; }
+  .side-link { font-size: 1rem; padding: 0.7rem 0.9rem; line-height: 1.25; }
+}

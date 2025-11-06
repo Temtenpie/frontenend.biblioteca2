@@ -1,0 +1,33 @@
+<div class="register-container">
+  <div class="register-layout">
+    <section class="brand-panel card">
+      <div class="brand-logo">📝</div>
+      <h2>Crear Cuenta</h2>
+      <p class="brand-sub">Configura tu perfil y empieza a usar la biblioteca.</p>
+      <ul class="features">
+        <li>Roles de estudiante y profesor</li>
+        <li>Acceso rápido al catálogo</li>
+        <li>Historial de préstamos</li>
+      </ul>
+    </section>
+    <section class="form-panel card">
+      <h1>Registro</h1>
+      <form (ngSubmit)="onRegister()" class="register-form-inner">
+        <input type="text" [(ngModel)]="name" name="name" placeholder="Nombre completo">
+        <input type="email" [(ngModel)]="email" name="email" placeholder="Correo electrónico">
+        <input type="text" [(ngModel)]="username" name="username" placeholder="Usuario">
+        <input type="password" [(ngModel)]="password" name="password" placeholder="Contraseña">
+        <select [(ngModel)]="role" name="role">
+          <option value="student">Estudiante</option>
+          <option value="teacher">Profesor</option>
+        </select>
+        <button type="submit">Registrarse</button>
+      </form>
+      @if (error()) { <div class="error">{{ error() }}</div> }
+      @if (success()) { <div class="success">{{ success() }}</div> }
+      <div class="link">
+        <a routerLink="/login">¿Ya tienes cuenta? Inicia sesión</a>
+      </div>
+    </section>
+  </div>
+</div>

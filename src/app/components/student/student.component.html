@@ -1,0 +1,116 @@
+<div class="student-container">
+  <header class="student-header">
+    <div class="header-left">
+      <h1>📚 Portal del Estudiante</h1>
+      <p>{{ userName() }}</p>
+    </div>
+    <button (click)="logout()" class="logout-btn">Cerrar Sesión</button>
+  </header>
+
+  <div class="student-layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="avatar">🎓</div>
+        <div class="info">
+          <div class="name">{{ userName() }}</div>
+          <div class="role text-muted">Estudiante</div>
+        </div>
+      </div>
+      <nav class="side-nav">
+        <button class="side-link" [class.active]="activeTab() === 'dashboard'" (click)="switchTab('dashboard')">📊 Dashboard</button>
+        <button class="side-link" [class.active]="activeTab() === 'books'" (click)="switchTab('books')">📖 Libros</button>
+        <button class="side-link" [class.active]="activeTab() === 'loans'" (click)="switchTab('loans')">📤 Mis Préstamos</button>
+      </nav>
+    </aside>
+
+    <section class="content">
+    <!-- Dashboard Tab -->
+    <div *ngIf="activeTab() === 'dashboard'" class="tab-content">
+      <div class="dashboard-card">
+        <h2>Bienvenido, {{ userName() }}</h2>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="label">Email:</span>
+            <span class="value">{{ userEmail() }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Libros Disponibles:</span>
+            <span class="value">{{ books().length }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Mis Préstamos Activos:</span>
+            <span class="value">{{ activeLoansCount() }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Books Tab -->
+    <div *ngIf="activeTab() === 'books'" class="tab-content">
+      <h2>📖 Libros Disponibles en la Biblioteca</h2>
+      <div *ngIf="loading()" class="loading">Cargando libros...</div>
+      <div *ngIf="!loading() && books().length === 0" class="empty">
+        No hay libros disponibles
+      </div>
+      <div class="books-grid" *ngIf="!loading() && books().length > 0">
+        <div class="book-card" *ngFor="let book of books()">
+          <div class="book-cover">📕</div>
+          <h3>{{ book.titulo }}</h3>
+          <p class="author">{{ book.autor }}</p>
+          <p class="isbn">ISBN: {{ book.isbn }}</p>
+          <p class="year">Año: {{ book.anio }}</p>
+          <p class="category">{{ book.categoria }}</p>
+          <p class="available" [class.unavailable]="book.disponibles === 0">
+            {{ book.disponibles > 0 ? '✅ ' + book.disponibles + ' disponible(s)' : '❌ No disponible' }}
+          </p>
+          <p class="description" *ngIf="book.descripcion">{{ book.descripcion }}</p>
+          <button 
+            *ngIf="book.disponibles > 0" 
+            (click)="requestLoan(book)"
+            [disabled]="hasActiveLoan(book._id)"
+            class="btn-borrow">
+            {{ hasActiveLoan(book._id) ? 'Ya solicitado' : '📚 Solicitar Préstamo' }}
+          </button>
+          <button 
+            *ngIf="book.disponibles === 0" 
+            disabled
+            class="btn-unavailable">
+            No disponible
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loans Tab -->
+    <div *ngIf="activeTab() === 'loans'" class="tab-content">
+      <h2>📤 Mis Préstamos</h2>
+      <div *ngIf="loading()" class="loading">Cargando préstamos...</div>
+      <div *ngIf="!loading() && loans().length === 0" class="empty">
+        No tienes préstamos activos
+      </div>
+      <table class="loans-table" *ngIf="!loading() && loans().length > 0">
+        <thead>
+          <tr>
+            <th>Libro</th>
+            <th>Autor</th>
+            <th>Fecha Préstamo</th>
+            <th>Fecha Límite</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let loan of loans()" [class]="'status-' + loan.estado">
+            <td>{{ loan.libroId?.titulo || 'N/A' }}</td>
+            <td>{{ loan.libroId?.autor || 'N/A' }}</td>
+            <td>{{ loan.createdAt | date: 'short' }}</td>
+            <td>{{ loan.fechaLimite | date: 'short' }}</td>
+            <td class="status-badge" [class]="'badge-' + loan.estado">
+              {{ loan.estado | uppercase }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </section>
+  </div>
+</div>
