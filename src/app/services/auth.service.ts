@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { LoginResponse } from '../interfaces/auth.interfaces';
 
@@ -15,7 +16,26 @@ export class AuthService {
 
   login(username: string, password: string): Observable<LoginResponse> {
     console.log('📡 Login URL:', this.loginUrl);
-    return this.http.post<LoginResponse>(this.loginUrl, { username, password });
+    const payload: any = { username, password };
+    // En algunos backends el campo es `email`; enviamos ambos para compatibilidad
+    payload.email = username;
+
+    return this.http
+      .post<any>(this.loginUrl, payload, { withCredentials: true })
+      .pipe(
+        map((res: any) => {
+          const token = res?.token ?? res?.accessToken ?? res?.data?.token ?? '';
+          const user = res?.user ?? res?.data?.user ?? null;
+          const success = res?.success ?? !!token;
+          const normalized: LoginResponse = {
+            success,
+            token,
+            user: user ?? { id: '', username: username, role: 'student', name: '' },
+            message: res?.message
+          };
+          return normalized;
+        })
+      );
   }
 
   register(payload: { username: string; password: string; name: string; email: string; role?: 'admin' | 'student' | 'teacher' }): Observable<any> {
